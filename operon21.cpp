@@ -6,7 +6,19 @@ using namespace std;
 
 ifstream plik("klucze.txt");
 
-bool czyPierwsza(unsigned long long int n)
+bool NWD(unsigned long long int a, unsigned long long int b) // sprawdza czy a i b sa wzglednie pierwsze
+{
+	if (a == b) return false;
+	while (a != b)
+	{
+		if (a > b) a -= b;
+		else b -= a;
+	}
+	if (a == 1) return true;
+	else return false;
+}
+
+bool czyPierwsza(unsigned long long int n) // sprawdza czy n jest liczba pierwsza
 {
 	if (n == 1) return false;
 	for (unsigned long long int i = 2; i <= (n / 2); i++)
@@ -26,6 +38,8 @@ void minImax()
 		plik >> n >> e >> d;
 		int dlgsc = 0;
 		unsigned long long int nn = n;
+		bool eSPR = true;
+		bool dSPR = true;
 		while (nn > 0)
 		{
 			dlgsc++;
@@ -33,18 +47,23 @@ void minImax()
 		}
 		if (dlgsc % 2 == 1) dlgsc = (dlgsc / 2) + 1;
 		else dlgsc /= 2;
-		cout << n << "\t" << dlgsc << endl;
+		//cout << n << "\t" << dlgsc << endl;
 		for (int j = 2; j < pow(10, dlgsc); j++)
 		{
 			if (czyPierwsza(j))
 			{
-				if (n % j == 0/* && czyPierwsza(n / j)*/)
+				if (n % j == 0 && czyPierwsza(n / j))
 				{
-					if (j < min) min = j;
-					if (j > max) max = j;
+					unsigned long long int a = (j - 1) * ((n / j) - 1); // (p-1)*(q-1), gdzie p i q to dwie rozne liczy pierwsze takie, ze p*q = n
+					if (j < min) min = j; // min
+					if (j > max) max = j; // max
+					if (!NWD(a, e)) eSPR = false; // sprawdza czy e jest poprawne
+					//cout << n << "\t" << nwd << endl;
+					if ((e * d) % a != 1) dSPR = false; // sprawdza czy d jest poprawne
 				}
 			}
 		}
+		if (!eSPR || !dSPR) cout << n << "\t" << e << "\t" << d << endl;
 	}
 	plik.close();
 	cout << min << "\t" << max << endl;
