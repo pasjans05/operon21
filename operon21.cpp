@@ -5,6 +5,8 @@
 using namespace std;
 
 ifstream plik("klucze.txt");
+ifstream plik2("wiadomosc.txt");
+fstream tekst("tekst.txt");
 
 bool NWD(unsigned long long int a, unsigned long long int b) // sprawdza czy a i b sa wzglednie pierwsze
 {
@@ -35,6 +37,7 @@ void minImax()
 	unsigned long long int max = 0;
 	for (int i = 0; i < 50; i++)
 	{
+		plik2.open("wiadomosc.txt");
 		plik >> n >> e >> d;
 		int dlgsc = 0;
 		unsigned long long int nn = n;
@@ -64,6 +67,22 @@ void minImax()
 			}
 		}
 		if (!eSPR || !dSPR) cout << n << "\t" << e << "\t" << d << endl;
+		unsigned long long int c = 0;
+		unsigned long long int m;
+		while (plik2.good())
+		{
+			plik2 >> c;
+			m = pow(c, n);
+			m %= n;
+			tekst << m << " ";
+		}
+		plik2.close();
+	}
+	string l;
+	while (tekst.good())
+	{
+		tekst >> l;
+		cout << l << endl;
 	}
 	plik.close();
 	cout << min << "\t" << max << endl;
